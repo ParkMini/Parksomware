@@ -1,4 +1,4 @@
-package kr.pah;
+package kr.pah.Encryptor;
 
 import java.util.Scanner;
 
