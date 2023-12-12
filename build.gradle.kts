@@ -1,5 +1,5 @@
 plugins {
-    id("java")
+    java
 }
 
 group = "kr.pah"
@@ -16,4 +16,12 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "kr.pah.Main"
+    }
+
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
 }
