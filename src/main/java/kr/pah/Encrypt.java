@@ -24,7 +24,7 @@ public class Encrypt {
 
         // 암호화된 파일 경로 저장
         try (FileWriter writer = new FileWriter(System.getenv("APPDATA") + "\\encrypted.txt")) {
-            writer.write(KEY);
+            writer.write(KEY + System.lineSeparator());
             for (String filePath : encryptedFiles) {
                 writer.write(filePath + System.lineSeparator());
             }
