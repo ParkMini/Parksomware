@@ -10,6 +10,8 @@ public class Main {
             System.out.println("Ok");
             Encrypt.runEncryption();
             System.out.println("Done");
+        } else if (verify.equals("decrypt")) {
+            Decrypt.runDecryption();
         } else {
             System.out.println("NotRun");
         }
