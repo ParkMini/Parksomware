@@ -10,8 +10,10 @@ repositories {
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.1")
+    implementation("net.java.dev.jna:jna:5.14.0")
+    implementation("net.java.dev.jna:jna-platform:5.14.0")
 }
 
 tasks.test {
@@ -20,8 +22,18 @@ tasks.test {
 
 tasks.jar {
     manifest {
-        attributes["Main-Class"] = "kr.pah.Main"
+        attributes(mapOf("Main-Class" to "kr.pah.Main"))
     }
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) }) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+}
 
-    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+sourceSets {
+    main {
+        resources {
+            srcDir("src/main/resources")
+            include("background.png")
+        }
+    }
 }

