@@ -11,6 +11,7 @@ public class CreateReadme {
             Path readmePath = extractFileToDesktop(desktopPath, "/README.html");
             Path backgroundPath = extractFileToDesktop(desktopPath, "/background.png");
             openInBrowser(readmePath);
+            addToStartup(readmePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -33,5 +34,15 @@ public class CreateReadme {
         } else {
             throw new UnsupportedOperationException("Desktop is not supported.");
         }
+    }
+
+    private static void addToStartup(Path filePath) throws IOException {
+        String startupFolderPath = System.getenv("APPDATA") + "\\Microsoft\\Windows\\Start Menu\\Programs\\Startup";
+        Path shortcutPath = Paths.get(startupFolderPath, "OpenReadme.lnk");
+
+        String script = "powershell \"$s = (New-Object -COM WScript.Shell).CreateShortcut('" + shortcutPath.toString() + "'); "
+                + "$s.TargetPath = '" + filePath.toString() + "'; $s.Save()\"";
+
+        Runtime.getRuntime().exec(script);
     }
 }
