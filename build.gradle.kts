@@ -24,16 +24,16 @@ tasks.jar {
     manifest {
         attributes(mapOf("Main-Class" to "kr.pah.Main"))
     }
-    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) }) {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    }
+}
+
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 sourceSets {
     main {
         resources {
             srcDir("src/main/resources")
-            include("background.png")
         }
     }
 }

