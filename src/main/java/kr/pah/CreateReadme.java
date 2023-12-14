@@ -1,6 +1,6 @@
 package kr.pah;
 
-import java.awt.Desktop;
+import java.awt.*;
 import java.io.*;
 import java.nio.file.*;
 
@@ -17,11 +17,12 @@ public class CreateReadme {
 
             Path readmePath = extractFileToAppData("/README.html");
             Path backgroundPath = extractFileToAppData("/background.png");
-
             Path desktopShortcut = addToDesktopShortcut(readmePath);
-            addToStartup(desktopShortcut);
+            addToStartup(readmePath);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -36,21 +37,39 @@ public class CreateReadme {
         return filePath;
     }
 
-    private static Path addToDesktopShortcut(Path filePath) throws IOException {
+    private static Path addToDesktopShortcut(Path filePath) throws IOException, InterruptedException {
         Path desktopPath = Paths.get(System.getenv("USERPROFILE"), "Desktop");
         Path shortcutPath = desktopPath.resolve(filePath.getFileName().toString() + ".lnk");
+
+        String script = "powershell \"$s = (New-Object -COM WScript.Shell).CreateShortcut('" + shortcutPath + "'); "
+                + "$s.TargetPath = '" + filePath + "'; $s.Save()\"";
+        Runtime.getRuntime().exec(script);
+
+        int attempts = 0;
+        while (!Files.exists(shortcutPath) && attempts < 10) {
+            Thread.sleep(500);
+            attempts++;
+        }
+
+        // 파일이 존재하면 실행
+        if (Files.exists(shortcutPath)) {
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
+                Desktop.getDesktop().open(shortcutPath.toFile());
+            }
+        } else {
+            System.out.println("바로가기 생성 실패: " + shortcutPath);
+        }
+
+        return shortcutPath;
+    }
+
+    private static void addToStartup(Path filePath) throws IOException {
+        String startupFolderPath = System.getenv("APPDATA") + "\\Microsoft\\Windows\\Start Menu\\Programs\\Startup";
+        Path shortcutPath = Paths.get(startupFolderPath, filePath.getFileName().toString() + ".lnk");
 
         String script = "powershell \"$s = (New-Object -COM WScript.Shell).CreateShortcut('" + shortcutPath.toString() + "'); "
                 + "$s.TargetPath = '" + filePath.toString() + "'; $s.Save()\"";
 
         Runtime.getRuntime().exec(script);
-        return shortcutPath;
-    }
-
-    private static void addToStartup(Path shortcutPath) throws IOException {
-        String startupFolderPath = System.getenv("APPDATA") + "\\Microsoft\\Windows\\Start Menu\\Programs\\Startup";
-        Path startupShortcutPath = Paths.get(startupFolderPath, shortcutPath.getFileName().toString());
-
-        Files.copy(shortcutPath, startupShortcutPath, StandardCopyOption.REPLACE_EXISTING);
     }
 }
