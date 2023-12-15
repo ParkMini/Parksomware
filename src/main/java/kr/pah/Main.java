@@ -16,6 +16,7 @@ public class Main {
             System.out.println("Encrypting...");
             Encrypt.runEncryption();
             System.out.println("Done");
+            SystemReboot.main();
         } else if (verify.equals("decrypt")) {
             Decrypt.runDecryption();
         } else {
