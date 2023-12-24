@@ -1,5 +1,6 @@
-### Parksomware
-
+### Java로 만든 랜섬웨어, Parksomware
+![](https://velog.velcdn.com/images/parkmini/post/e3e6bd5c-34af-463d-9073-c598f8d2353a/image.png)
+[자세한 프로젝트 소개 글은 여기를 클릭해주세요. (Velog)](https://velog.io/@parkmini/Java%EB%A1%9C-%EB%A7%8C%EB%93%A0-%EB%9E%9C%EC%84%AC%EC%9B%A8%EC%96%B4-Parksomware)
 #### 프로젝트 소개
 
 Parksomware는 교육적 목적으로 만들어진 랜섬웨어 프로젝트입니다.
